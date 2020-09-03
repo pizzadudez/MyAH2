@@ -1,0 +1,5 @@
+{
+  "python.pythonPath": "env\\Scripts\\python.exe",
+  "python.analysis.disabled": ["unresolved-import"],
+  "python.linting.pylintArgs": ["--load-plugin", "pylint_protobuf"]
+}
