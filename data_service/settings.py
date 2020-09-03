@@ -26,3 +26,5 @@ REALMS_DICT = realms_config
 
 CR_IDS_PATH = os.path.join(dirname, 'cache', 'cr_ids.json')
 DATA_PATH = os.path.join(dirname, 'data')
+
+AUCTIONS_DB_PATH = os.path.join(dirname, '..', 'db', 'auctions.db')

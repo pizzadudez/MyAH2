@@ -6,3 +6,5 @@ config/realms.json
 
 data_service/cache
 data_service/data
+
+db/
