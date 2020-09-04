@@ -1,10 +1,5 @@
-/env
-__pycache__
 config/config.json
 config/items.json
 config/realms.json
-
-data_service/cache
-data_service/data
 
 db/
