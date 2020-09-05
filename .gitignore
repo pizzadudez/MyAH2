@@ -2,4 +2,6 @@ config/config.json
 config/items.json
 config/realms.json
 
+services/env
+
 db/

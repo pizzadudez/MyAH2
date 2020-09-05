@@ -2,16 +2,19 @@
 
 import os
 import json
+import time
 import pickle
 
 from multiprocessing import Process, Queue
 
 from settings import REALMS_DICT, CR_IDS_PATH, DATA_PATH
-from api import parse_auctions, get_connected_realm_ids
+from api import create_api_instance, get_connected_realm_ids
 from db import update_auctions_db
 
 class DataService:
     def __init__(self):
+        # Extended wowApi instance
+        self.api = create_api_instance()
         # Get connected_real_ids hash map
         if not os.path.exists(CR_IDS_PATH):
             self.cr_ids = get_connected_realm_ids()
@@ -21,19 +24,28 @@ class DataService:
         self.realms = list(REALMS_DICT.keys())
 
     def update_all_realms(self):
-        processes = []
         queue= Queue()
 
+        # Chunk realm list to throttle subprocesses
+        chunk_size = 30
+        realm_chunks = [self.realms[x:x + chunk_size] 
+                for x in range(0, len(self.realms), chunk_size)]
+
         # Multiprocessing workers
-        for realm_name in self.realms:
-            cr_id = self.cr_ids[realm_name]
-            process = Process(target=parse_auctions, 
-                    args=(realm_name, cr_id, queue))
-            processes.append(process)
-            process.start()
-        for process in processes:
-            process.join()
+        for chunk in realm_chunks:
+            processes = []
+            for realm_name in chunk:
+                cr_id = self.cr_ids[realm_name]
+                process = Process(target=self.api.handle_realm, 
+                        args=(realm_name, cr_id, queue))
+                processes.append(process)
+                process.start()
+                time.sleep(1)
+            for process in processes:
+                process.join()
+        print('> Requests finished...')
         
+        # Parse worker data
         parsed_auctions = []
         while not queue.empty():
             # Retrieve data from worker
