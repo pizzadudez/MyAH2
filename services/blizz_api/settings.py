@@ -29,7 +29,7 @@ AUCTIONS_DB_PATH = os.path.join(dirname, '..', '..', 'db', 'auctions.db')
 
 
 # Create output folders
-if not os.path.exists(CR_IDS_PATH):
+if not os.path.exists(os.path.dirname(CR_IDS_PATH)):
     os.makedirs(os.path.dirname(CR_IDS_PATH))
 if not os.path.exists(DATA_PATH):
     os.makedirs(DATA_PATH)

@@ -35,32 +35,32 @@ class CustomApi(WowApi):
         print(realm_name + '... done')
         queue.put((realm_name, cr_id))
 
+    def get_connected_realm_ids(self):
+        resource = resource = 'data/wow/connected-realm/index' + QUERY_PARAMS
+        response = self.get_resource(resource, REGION)
+        
+        cr_ids = {}
+        for cr in response.get('connected_realms', []):
+            url = cr['href'].replace(BASE_URL, '')
+            response = self.get_resource(url + LOCALE, REGION)
+            cr_id = response['id']
+            realm_names = [x['name'] for x in response['realms']]
+            for name in realm_names:
+                cr_ids[name] = cr_id
+
+        # dump as json 
+        with open(CR_IDS_PATH, 'w') as file:
+            json.dump(cr_ids, file, indent=4)
+
+        return cr_ids
+
+
 def create_api_instance():
     api = CustomApi(CLIENT_ID, CLIENT_SECRET)
     api._get_client_credentials(REGION)
     return api
 
-def get_connected_realm_ids():
-    resource = resource = 'data/wow/connected-realm/index' + QUERY_PARAMS
-    response = Api.get_resource(resource, REGION)
-    
-    cr_ids = {}
-    for cr in response.get('connected_realms', []):
-        url = cr['href'].replace(BASE_URL, '')
-        response = Api.get_resource(url + LOCALE, REGION)
-        cr_id = response['id']
-        realm_names = [x['name'] for x in response['realms']]
-        for name in realm_names:
-            cr_ids[name] = cr_id
-
-    # dump as json 
-    with open(CR_IDS_PATH, 'w') as file:
-        json.dump(cr_ids, file, indent=4)
-
-    return cr_ids
-
-
 
 if __name__ == '__main__':
-    get_connected_realm_ids()
+    pass
 

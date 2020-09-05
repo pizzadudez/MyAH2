@@ -8,7 +8,7 @@ import pickle
 from multiprocessing import Process, Queue
 
 from settings import REALMS_DICT, CR_IDS_PATH, DATA_PATH
-from api import create_api_instance, get_connected_realm_ids
+from api import create_api_instance
 from db import update_auctions_db
 
 class DataService:
@@ -17,7 +17,7 @@ class DataService:
         self.api = create_api_instance()
         # Get connected_real_ids hash map
         if not os.path.exists(CR_IDS_PATH):
-            self.cr_ids = get_connected_realm_ids()
+            self.cr_ids = self.api.get_connected_realm_ids()
         else:
             with open(CR_IDS_PATH, 'r') as file:
                 self.cr_ids = json.load(file)
