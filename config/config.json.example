@@ -1,0 +1,33 @@
+{
+  "CLIENT_ID": "4132aa0768624d919ebd73d41a71c896",
+  "CLIENT_SECRET": "azn6ydK2DyQriry3C1pRdC4iRd8qFM6b",
+  "REGION": "us",
+
+  "LUA_FILE": "Multiboxer_Data.lua",
+  "LUA_FILE_REMOVE_STRING": "Multiboxer_DataDB = ",
+  "WOW_FOLDERS_ROOT_PATH": "C:\\_wow\\wow_us",
+  "WOW_FOLDER_NAMES": [
+    "wow0",
+    "wow1",
+    "wow2",
+    "wow3",
+    "wow4",
+    "wow5",
+    "wow6",
+    "wow7",
+    "wow8",
+    "wow9"
+  ],
+  "ACCOUNT_FOLDER_NAMES": [
+    "491749343#1",
+    "491749343#2",
+    "491749343#3",
+    "491749343#4",
+    "491749343#5",
+    "491740943#1",
+    "491740943#2",
+    "491740943#3",
+    "491740943#4",
+    "491740943#5"
+  ]
+}

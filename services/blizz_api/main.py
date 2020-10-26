@@ -27,7 +27,7 @@ class DataService:
         queue= Queue()
 
         # Chunk realm list to throttle subprocesses
-        chunk_size = 30
+        chunk_size = 15
         realm_chunks = [self.realms[x:x + chunk_size] 
                 for x in range(0, len(self.realms), chunk_size)]
 
