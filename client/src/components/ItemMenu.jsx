@@ -5,10 +5,11 @@ const Container = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
+  color: whitesmoke;
 `;
 const Tab = memo(styled.div`
   padding: 20px;
-  background-color: ${({ selected }) => (selected ? 'darkgrey' : 'grey')};
+  background-color: ${({ selected }) => (selected ? 'gray' : 'dimgray')};
 `);
 
 export default memo(({ items, setItemId, itemId }) => {

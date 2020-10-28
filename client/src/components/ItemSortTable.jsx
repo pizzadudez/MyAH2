@@ -8,6 +8,7 @@ import React, {
 import styled from 'styled-components';
 
 import { AuctionContext } from '../contexts/AuctionContext';
+import RealmAuctions from './RealmAuctions';
 
 const tableColumns = ['mean_price', 'quantity', 'my_quantity'];
 const sortFn = (isDescSort, sortCol) => (a, b) => {
@@ -45,25 +46,32 @@ export default memo(({ itemId }) => {
     <StyledTable>
       <thead>
         <tr>
-          <th>realm</th>
+          <th>Realm</th>
           <th data-col={'mean_price'} onClick={sortClickHandler}>
-            price
+            Price
           </th>
           <th data-col={'my_quantity'} onClick={sortClickHandler}>
-            inventory
+            Qty
           </th>
           <th data-col={'quantity'} onClick={sortClickHandler}>
-            ah qty(K)
+            AH Qty
           </th>
+          <th>Auctions</th>
         </tr>
       </thead>
       <tbody>
         {tableRows.map(([realmName, data]) => (
           <tr key={realmName}>
-            <td>{realmName}</td>
-            <td>{Math.round(data.mean_price / 100) / 100}</td>
-            <td>{data.my_quantity}</td>
+            <td style={{ textAlign: 'left' }}>{realmName}</td>
+            <td>{(data.mean_price / 10000).toFixed(1)}</td>
+            <td>{data.my_quantity !== 0 ? data.my_quantity : '-'}</td>
             <td>{data.quantity}</td>
+            <td>
+              <RealmAuctions
+                auctions={data.auctions}
+                ownAuctionIds={data.my_auction_ids}
+              />
+            </td>
           </tr>
         ))}
       </tbody>
@@ -72,8 +80,14 @@ export default memo(({ itemId }) => {
 });
 
 const StyledTable = styled.table`
+  padding: 10px 12px;
   td {
-    min-width: 80px;
+    min-width: 36px;
     padding: 0 10px;
+    text-align: right;
+  }
+  th {
+    text-align: left;
+    padding: 0 0 12px 10px;
   }
 `;

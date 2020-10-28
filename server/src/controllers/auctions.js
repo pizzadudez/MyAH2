@@ -28,6 +28,8 @@ exports.get = async (req, res) => {
       obj[item_id] = obj[item_id] || {};
       obj[item_id][realm] = obj[item_id][realm] || {};
       obj[item_id][realm].auctions = obj[item_id][realm].auctions || [];
+      // add own_auc prop
+      auc.own_auc = !!inventory[realm].auction_ids.includes(auc.auc_id);
       obj[item_id][realm].auctions.push(auc);
 
       obj[item_id][realm].quantity = obj[item_id][realm].quantity || 0;

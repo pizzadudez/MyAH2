@@ -1,8 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react';
+import styled from 'styled-components';
 
 import { AuctionContext } from '../contexts/AuctionContext';
 import ItemMenu from '../components/ItemMenu';
 import ItemSortTable from '../components/ItemSortTable';
+
+const Page = styled.div`
+  background-color: #222;
+`;
 
 export default () => {
   const { items, loaded } = useContext(AuctionContext);
@@ -14,9 +19,9 @@ export default () => {
   if (!loaded) return <div>LOADING</div>;
 
   return (
-    <div>
+    <Page>
       <ItemMenu items={items} setItemId={setItemId} itemId={itemId} />
       <ItemSortTable itemId={itemId} />
-    </div>
+    </Page>
   );
 };
