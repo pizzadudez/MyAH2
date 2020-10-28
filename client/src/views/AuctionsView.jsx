@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 
 import { AuctionContext } from '../contexts/AuctionContext';
 import ItemMenu from '../components/ItemMenu';
-import ItemTable from '../components/ItemTable';
+import ItemSortTable from '../components/ItemSortTable';
 
 export default () => {
   const { items, loaded } = useContext(AuctionContext);
@@ -16,7 +16,7 @@ export default () => {
   return (
     <div>
       <ItemMenu items={items} setItemId={setItemId} itemId={itemId} />
-      <ItemTable itemId={itemId} />
+      <ItemSortTable itemId={itemId} />
     </div>
   );
 };
