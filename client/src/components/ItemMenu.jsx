@@ -1,42 +1,30 @@
 import React, { memo, useCallback } from 'react';
-import styled from 'styled-components'
-
-
-export default memo(({items, selectItem}) => {
-  // const onClickHandlers = Object.keys(items).reduce((obj, id) => {
-  //   obj[id] = useCallback(() => selectItem(id), []); return obj
-  // }, {})
-
-  // console.log('render bar')
-  // return (
-  //   <Container>
-  //     {Object.entries(items).map(([id, name]) => (<Tab onClick={onClickHandlers[id]} key={id}>{`${name} (${id})`}</Tab>))}
-  //   </Container>
-  // )
-
-  const selectHandler = useCallback(e => {
-    const itemId = Number(e.target.dataset['id'])
-    selectItem(itemId)
-  }, [selectItem])
-
-  const tabs = Object.entries(items).map(([id, name]) => (
-    <Tab key={id} data-id={id} onClick={selectHandler}>{name}</Tab>
-  )) 
-
-  return (
-    <Container>
-      {tabs}
-    </Container>
-  )
-})
+import styled from 'styled-components';
 
 const Container = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
 `;
-
-const Tab = styled.div`
+const Tab = memo(styled.div`
   padding: 20px;
-  background-color: gray;
-`;
+  background-color: ${({ selected }) => (selected ? 'darkgrey' : 'grey')};
+`);
+
+export default memo(({ items, setItemId, itemId }) => {
+  const selectHandler = useCallback(
+    e => {
+      const itemId = e.target.dataset['id'];
+      setItemId(itemId);
+    },
+    [setItemId]
+  );
+
+  const tabs = Object.entries(items).map(([id, name]) => (
+    <Tab key={id} data-id={id} onClick={selectHandler} selected={itemId === id}>
+      {name}
+    </Tab>
+  ));
+
+  return <Container>{tabs}</Container>;
+});
