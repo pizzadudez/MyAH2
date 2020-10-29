@@ -8,7 +8,7 @@ export const AuctionContext = createContext(null);
 export const AuctionProvider = ({ children }) => {
   const [loaded, setLoaded] = useState(false);
   const [auctions, setAuctions] = useState({});
-  const [items, setItems] = useState({});
+  const [items, setItems] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {

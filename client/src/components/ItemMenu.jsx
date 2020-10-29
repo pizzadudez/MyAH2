@@ -21,7 +21,7 @@ export default memo(({ items, setItemId, itemId }) => {
     [setItemId]
   );
 
-  const tabs = Object.entries(items).map(([id, name]) => (
+  const tabs = items.map(({ id, name }) => (
     <Tab key={id} data-id={id} onClick={selectHandler} selected={itemId === id}>
       {name}
     </Tab>

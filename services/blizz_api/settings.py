@@ -15,7 +15,7 @@ with open(os.path.join(config_path, 'items.json')) as file:
 with open(os.path.join(config_path, 'realms.json')) as file:
     realms_config = json.load(file)
 
-ITEMS_DICT = items_config
+ITEMS_DICT = {x['id']: True for x in items_config}
 REALMS_DICT = realms_config
 
 # Blizz API

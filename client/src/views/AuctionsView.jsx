@@ -12,11 +12,14 @@ const Page = styled.div`
 export default () => {
   const { items, loaded } = useContext(AuctionContext);
   const [itemId, setItemId] = useState(null);
-  useEffect(() => {
-    setItemId(Object.keys(items)[0]);
-  }, [items]);
 
-  if (!loaded) return <div>LOADING</div>;
+  useEffect(() => {
+    if (loaded) {
+      setItemId(items[0].id);
+    }
+  }, [items, loaded]);
+
+  if (!loaded || !itemId) return <div>LOADING</div>;
 
   return (
     <Page>

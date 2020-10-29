@@ -32,7 +32,7 @@ const sortReducer = (state, column) => {
 export default memo(({ itemId }) => {
   const { auctions } = useContext(AuctionContext);
   const [sort, sortDispatch] = useReducer(sortReducer, initialSort);
-
+  debugger;
   const tableRows = useMemo(
     () => Object.entries(auctions[itemId]).sort(sortFn(sort.isDesc, sort.col)),
     [itemId, auctions, sort.isDesc, sort.col]
