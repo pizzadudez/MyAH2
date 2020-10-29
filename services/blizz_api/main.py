@@ -60,7 +60,7 @@ class DataService:
                     realm_name,
                     auc['item']['id'],
                     auc['quantity'],
-                    auc['unit_price'],
+                    auc.get('unit_price', None) or auc.get('buyout', None),
                     auc['time_left']
                 )
                 parsed_auctions.append(parsed_auc)
