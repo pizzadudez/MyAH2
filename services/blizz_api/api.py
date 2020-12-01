@@ -6,6 +6,8 @@ import json
 import pickle
 from wowapi import WowApi
 
+from datetime import datetime, timedelta
+
 from settings import *
 
 BASE_URL = f'https://{REGION}.api.blizzard.com/'
@@ -35,6 +37,54 @@ class CustomApi(WowApi):
         print(realm_name + '... done')
         queue.put((realm_name, cr_id))
 
+    def get_last_modified(self, realm_name, cr_id):
+        response = self.test_request_response(cr_id)
+        headers = response.headers
+        last_mod = headers.get('Last-Modified', None)
+        return last_mod
+
+    def test_request_response(self, cr_id, *args, **filters):
+        region = REGION
+        resource = f'data/wow/connected-realm/{cr_id}/auctions' + QUERY_PARAMS
+        resource = resource.format(*args)
+
+        # fetch access token on first run for region
+        if region not in self._access_tokens:
+            # logger.info('Fetching access token..')
+            self._get_client_credentials(region)
+        else:
+            now = self._utcnow()
+            # refresh access token if expiring in the next 30 seconds.
+            # this protects against the rare occurrence of hitting
+            # the API right as your token expires, causing errors.
+            if now >= self._access_tokens[region]['expiration'] - timedelta(seconds=30):
+                # logger.info('Access token expired. Fetching new token..')
+                self._get_client_credentials(region)
+
+        filters['access_token'] = self._access_tokens[region]['token']
+        url = self._format_base_url(resource, region)
+        # logger.info('Requesting resource: {0} with parameters: {1}'.format(url, filters))
+        return self._handle_request_modified(url, params=filters)
+
+    def _handle_request_modified(self, url, **kwargs):
+        try:
+            response = self._session.get(url, **kwargs)
+        except RequestException as exc:
+            # logger.exception(str(exc))
+            raise WowApiException(str(exc))
+
+        if not response.ok:
+            msg = 'Invalid response - {0} - {1}'.format(url, response.status_code)
+            # logger.warning(msg)
+            raise WowApiException(msg)
+
+        try:
+            return response
+        except Exception:
+            msg = 'Invalid Json: {0} for {1}'.format(response.content, url)
+            # logger.exception(msg)
+            raise WowApiException(msg)
+
     def get_connected_realm_ids(self):
         resource = resource = 'data/wow/connected-realm/index' + QUERY_PARAMS
         response = self.get_resource(resource, REGION)
@@ -57,7 +107,8 @@ class CustomApi(WowApi):
 
 def create_api_instance():
     api = CustomApi(CLIENT_ID, CLIENT_SECRET)
-    api._get_client_credentials(REGION)
+    # Looks like WowApi handles getting credentials on .get_resource()
+    # api._get_client_credentials(REGION)
     return api
 
 

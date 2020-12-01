@@ -68,12 +68,17 @@ class DataService:
         # Db insert
         update_auctions_db(parsed_auctions)
 
-
     def update_realm(self):
         pass
 
+    def print_last_mod(self):
+        for realm_name in self.realms:
+            cr_id = self.cr_ids[realm_name]
+            last_mod = self.api.get_last_modified(realm_name, cr_id)
+            print(realm_name, last_mod)
 
 
 if __name__ == '__main__':
     ds = DataService()
     ds.update_all_realms()
+    # ds.print_last_mod()
