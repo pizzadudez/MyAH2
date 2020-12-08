@@ -40,7 +40,9 @@ exports.get = async (req, res) => {
       obj[item_id][realm] = obj[item_id][realm] || {};
       obj[item_id][realm].auctions = obj[item_id][realm].auctions || [];
       // add own_auc prop
-      auc.own_auc = !!inventory[realm].auction_ids.includes(auc.auc_id);
+      if (inventory[realm]) {
+        auc.own_auc = !!inventory[realm].auction_ids.includes(auc.auc_id);
+      }
       obj[item_id][realm].auctions.push(auc);
 
       obj[item_id][realm].quantity = obj[item_id][realm].quantity || 0;
@@ -69,7 +71,7 @@ exports.get = async (req, res) => {
         const {
           inventory: realmInventory,
           auctions: realmAuctions,
-        } = inventory[realm];
+        } = inventory[realm] || { inventory: {}, auctions: {} };
 
         const my_quantity =
           (realmInventory[item] || 0) + (realmAuctions[item] || 0);
@@ -80,7 +82,8 @@ exports.get = async (req, res) => {
           quantity,
           mean_price,
           my_quantity,
-          my_auction_ids: inventory[realm].auction_ids,
+          my_auction_ids:
+            (inventory[realm] && inventory[realm].auction_ids) || [],
         };
       });
     });

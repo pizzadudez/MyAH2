@@ -15,11 +15,11 @@ const InfoList = styled.ul`
 
 export default () => {
   const { info } = useContext(AuctionContext);
-  console.log(info);
+
   return (
     <InfoList>
       {Object.entries(info).map(([name, value]) => (
-        <li>
+        <li key={name}>
           <span>{name}</span>
           <span>{new Date(Number(value) * 1000).toLocaleString()}</span>
         </li>
