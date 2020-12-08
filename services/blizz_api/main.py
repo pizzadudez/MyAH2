@@ -66,16 +66,16 @@ class DataService:
                 parsed_auctions.append(parsed_auc)
         
         # Db insert
-        update_auctions_db(parsed_auctions)
+        last_blizz_update = self.get_last_modified()
+        update_auctions_db(parsed_auctions, last_blizz_update)
 
     def update_realm(self):
         pass
 
-    def print_last_mod(self):
-        for realm_name in self.realms:
-            cr_id = self.cr_ids[realm_name]
-            last_mod = self.api.get_last_modified(realm_name, cr_id)
-            print(realm_name, last_mod)
+    def get_last_modified(self):
+        # we don't need a particular realm
+        for realm_name, cr_id in self.cr_ids.items():
+            return self.api.get_last_modified("realm_name", cr_id)
 
 
 if __name__ == '__main__':

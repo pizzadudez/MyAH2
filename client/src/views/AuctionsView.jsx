@@ -4,9 +4,15 @@ import styled from 'styled-components';
 import { AuctionContext } from '../contexts/AuctionContext';
 import ItemMenu from '../components/ItemMenu';
 import ItemSortTable from '../components/ItemSortTable';
+import UpdateButton from '../components/UpdateButton';
+import InfoTab from '../components/InfoTab';
 
 const Page = styled.div`
   background-color: #222;
+`;
+const Menu = styled.div`
+  display: flex;
+  justify-content: start;
 `;
 
 export default () => {
@@ -23,7 +29,11 @@ export default () => {
 
   return (
     <Page>
-      <ItemMenu items={items} setItemId={setItemId} itemId={itemId} />
+      <Menu>
+        <ItemMenu items={items} setItemId={setItemId} itemId={itemId} />
+        <UpdateButton />
+        <InfoTab />
+      </Menu>
       <ItemSortTable itemId={itemId} />
     </Page>
   );

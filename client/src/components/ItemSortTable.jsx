@@ -32,7 +32,7 @@ const sortReducer = (state, column) => {
 export default memo(({ itemId }) => {
   const { auctions } = useContext(AuctionContext);
   const [sort, sortDispatch] = useReducer(sortReducer, initialSort);
-  debugger;
+
   const tableRows = useMemo(
     () => Object.entries(auctions[itemId]).sort(sortFn(sort.isDesc, sort.col)),
     [itemId, auctions, sort.isDesc, sort.col]
@@ -62,7 +62,16 @@ export default memo(({ itemId }) => {
       <tbody>
         {tableRows.map(([realmName, data]) => (
           <tr key={realmName}>
-            <td style={{ textAlign: 'left' }}>{realmName}</td>
+            <td style={{ textAlign: 'left' }}>
+              <a
+                href={`https://theunderminejournal.com/#us/${realmName
+                  .replace("'", '')
+                  .replace(' ', '-')}/item/${itemId}`}
+                target="_blank"
+              >
+                {realmName}
+              </a>
+            </td>
             <td>{(data.mean_price / 10000).toFixed(1)}</td>
             <td>{data.my_quantity !== 0 ? data.my_quantity : '-'}</td>
             <td>{data.quantity}</td>
@@ -89,5 +98,9 @@ const StyledTable = styled.table`
   th {
     text-align: left;
     padding: 0 0 12px 10px;
+  }
+  a {
+    text-decoration: none;
+    color: inherit;
   }
 `;

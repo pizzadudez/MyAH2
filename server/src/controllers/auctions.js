@@ -9,19 +9,30 @@ exports.get = async (req, res) => {
     // Inventory data from inventory service
     const inventory = JSON.parse(fs.readFileSync(inventoryDataPath, 'utf8'));
     // All auctions from blizz_api service
-    const auctions = await new Promise((resolve, reject) => {
+    const auctions = await new Promise((res, rej) => {
       db.all(
         `SELECT * FROM auctions
         ORDER BY realm, price ASC, auc_id DESC`,
         (err, rows) => {
           if (err) {
-            reject(new Error(err.message));
+            rej(new Error(err.message));
           } else {
-            resolve(rows);
+            res(rows);
           }
         }
       );
     });
+    // Info from our db
+    const timestamps = await new Promise((res, rej) => {
+      db.all('SELECT * FROM info', (err, rows) => {
+        if (err) {
+          rej(new Error(err.message));
+        } else {
+          res(rows);
+        }
+      });
+    });
+
     // Transform into nested json response
     const json = auctions.reduce((obj, auc) => {
       const { realm, item_id } = auc;
@@ -74,7 +85,15 @@ exports.get = async (req, res) => {
       });
     });
 
-    res.json(json);
+    // Response
+    const response = {};
+    // add info
+    timestamps.forEach(({ name, value }) => {
+      response[name] = value;
+    });
+    // add data
+    response.items = json;
+    res.json(response);
   } catch (err) {
     console.trace(err);
     res.sendStatus(500);
