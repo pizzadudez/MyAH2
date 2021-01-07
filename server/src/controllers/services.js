@@ -13,9 +13,13 @@ const auctionsUpdate = () => {
     const pythonProcess = spawn(pythonEnv, [
       path.join(servicesPath, '/blizz_api/main.py'),
     ]);
-    pythonProcess.on('exit', () => {
-      resolve('auctions updated!');
-    });
+    pythonProcess.on('close', code => {
+      if (code == 0) {
+        resolve('auctions updated')
+      } else {
+        reject(`auctions update service exited with code: ${code}`)
+      }
+    })
     pythonProcess.on('error', err => {
       console.log(err);
       reject(err);
@@ -28,9 +32,13 @@ const inventoryUpdate = () => {
     const pythonProcess = spawn(pythonEnv, [
       path.join(servicesPath, '/inventory/main.py'),
     ]);
-    pythonProcess.on('exit', () => {
-      resolve('inventory updated!');
-    });
+    pythonProcess.on('close', code => {
+      if (code == 0) {
+        resolve('auctions updated')
+      } else {
+        reject(`auctions update service exited with code: ${code}`)
+      }
+    })
     pythonProcess.on('error', err => {
       console.log(err);
       reject(err);
